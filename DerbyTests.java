@@ -22,15 +22,31 @@ public class DerbyTests {
     private FileWriter artistsFileWriter;
     private HashMap<String, FileWriter> fkTableCSVs;
     private HashSet<String> uniqueRecords;
-
+    
     public static void main(String[] args) throws Exception {
+        System.out.println("Building Tables");
         DerbyTests dt = new DerbyTests();
-        dt.makeCSVs();
-        dt.loadCSVs();
+        if (args.length == 0) {
+            dt.makeCSVs();
+            dt.loadCSVs();
+        }
         // Post impressionists -
-        String aaa = "SELECT ARTIST.URI, ARTIST.NAME,MOVEMENT_LABEL.FIELD1 FROM MOVEMENT_LABEL JOIN ARTIST ON ARTIST.URI = MOVEMENT_LABEL.ARTISTURI AND MOVEMENT_LABEL.FIELD1 LIKE '%Post-Impressionism%';";
+        String oldSQL1 = "SELECT ARTIST.URI, ARTIST.NAME,MOVEMENT_LABEL.FIELD1 FROM MOVEMENT_LABEL JOIN ARTIST ON ARTIST.URI = MOVEMENT_LABEL.ARTISTURI AND MOVEMENT_LABEL.FIELD1 LIKE '%Post-Impressionism%';";
         // punk rock australian born
-        String bbb = "SELECT ARTIST.URI, ARTIST.NAME, GENRE_LABEL.FIELD1, BIRTHPLACE_LABEL.FIELD1 FROM GENRE_LABEL JOIN ARTIST ON ARTIST.URI = GENRE_LABEL.ARTISTURI AND GENRE_LABEL.FIELD1 LIKE '%Punk rock%' JOIN BIRTHPLACE_LABEL ON ARTIST.URI = BIRTHPLACE_LABEL.ARTISTURI AND BIRTHPLACE_LABEL.FIELD1 LIKE '%Australia%';";
+        String oldSQL2 = "SELECT ARTIST.URI, ARTIST.NAME, GENRE_LABEL.FIELD1, BIRTHPLACE_LABEL.FIELD1 FROM GENRE_LABEL JOIN ARTIST ON ARTIST.URI = GENRE_LABEL.ARTISTURI AND GENRE_LABEL.FIELD1 LIKE '%Punk rock%' JOIN BIRTHPLACE_LABEL ON ARTIST.URI = BIRTHPLACE_LABEL.ARTISTURI AND BIRTHPLACE_LABEL.FIELD1 LIKE '%Australia%';";
+
+        String test1 = "SELECT * FROM ARTIST WHERE ARTIST.BIRTHDATE BETWEEN '1970-01-01' AND '1970-12-31';";
+
+        try {
+
+            Connection conn = DriverManager.getConnection(protocol + "derbyDB;create=true", null);
+            long start = System.nanoTime();
+            conn.createStatement().execute(test1);
+            long end = System.nanoTime();
+            System.out.println("Test 1 time:" + (end - start) / 1000000);
+        } finally {
+            // `
+        }
     }
 
     private void loadCSVs() throws SQLException {
