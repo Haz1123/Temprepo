@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 
 public class DerbyTests {
     public String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-    public String protocol = "jdbc:derby:";
+    public static String protocol = "jdbc:derby:";
     private File artistsDerbyCSV = new File("artist_derby.csv");
     private FileWriter artistsFileWriter;
     private HashMap<String, FileWriter> fkTableCSVs;
